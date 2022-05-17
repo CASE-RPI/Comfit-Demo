@@ -6,7 +6,7 @@
 html, body{
     margin: 0;
     padding: 0;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Lato', sans-serif !important;
     /* margin: 25px;
     line-height: 1.6; */
 }
@@ -231,7 +231,7 @@ a{
   margin-bottom: 6px;
 }
 
-.switch input { 
+.switch input {
   opacity: 0;
   width: 0;
   height: 0;
