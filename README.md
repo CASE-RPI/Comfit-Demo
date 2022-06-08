@@ -1,4 +1,4 @@
-# Live Demo of 
+# Live Demo of Web-based Microservice for monitoring indoor air quality based on BIM & IoT
 
 Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-rpi.github.io/Comfit-Demo/)
 
