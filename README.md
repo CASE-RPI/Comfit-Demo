@@ -8,7 +8,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 - MQTT.js
 - Bootstrap
 
-<iframe class="post_img" width="560" height="315" src="https://www.youtube.com/embed/ow9dznWaEQw" title="Build an IoT Monitoring System for Your Smart Home" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg)](https://www.youtube.com/watch?v=gqgwoeNuSBU)
 
 ## References
 - https://github.com/IFCJSON-Team/IFC2JSON_python/tree/master/file_converters
