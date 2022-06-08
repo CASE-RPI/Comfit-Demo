@@ -1,4 +1,6 @@
-# Comfit-Demo
+# Live Demo of 
+
+Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-rpi.github.io/Comfit-Demo/)
 
 ## Requirements
 - ifcopenshell
