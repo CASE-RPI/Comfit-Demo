@@ -27,8 +27,10 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 - MQTT.js
 - Bootstrap
 
+<p align="center">
 [![Demo Video of Comfit](https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg)](https://www.youtube.com/watch?v=gqgwoeNuSBU)
-
+</p>
+  
 ## References
 - https://github.com/IFCJSON-Team/IFC2JSON_python/tree/master/file_converters
 - https://github.com/IfcOpenBot/IfcOpenShell
