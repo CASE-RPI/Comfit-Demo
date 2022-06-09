@@ -21,15 +21,18 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
   <img src="/assets/Data_exchange2.jpg" alt="Data Exchange" style="width:80%;"/>
 </p>
   
+## Demo Video
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=gqgwoeNuSBU" target="_blank"><img src="https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg" alt="Demo Video" style="width:60%;"/></a>
+</p>
+
 ## Requirements
 - ifcopenshell
 - IFCJSON converter
 - MQTT.js
 - Bootstrap
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=gqgwoeNuSBU" target="_blank"><img src="https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg" alt="Demo Video" style="width:6666666666666660%;"/></a>
-</p>
+
   
 ## References
 - https://github.com/IFCJSON-Team/IFC2JSON_python/tree/master/file_converters
