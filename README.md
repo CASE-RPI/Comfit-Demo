@@ -9,6 +9,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 ![Workflow](/assets/Workflow.jpg)
 
 ## User Interface of Web Platform
+![UI](/assets/UI.jpg)
 
 ## Data Exchange between Sensor, Web, and Database
 
