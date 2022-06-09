@@ -7,11 +7,13 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 
 ## Concept Diagram
 ![Workflow](/assets/Workflow.jpg)
+![UI](/assets/Data_exchange.jpg)
 
 ## User Interface of Web Platform
 ![UI](/assets/UI.jpg)
 
 ## Data Exchange between Sensor, Web, and Database
+![UI](/assets/Data_exchange2.jpg)
 
 ## Requirements
 - ifcopenshell
