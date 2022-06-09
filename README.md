@@ -27,9 +27,8 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 - MQTT.js
 - Bootstrap
 
-[![Demo Video of Comfit](https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg)](https://www.youtube.com/watch?v=gqgwoeNuSBU)
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=gqgwoeNuSBU" target="_blank"><img src="https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg" alt="Demo Video" style="width:80%;"/></a>
+  <a href="https://www.youtube.com/watch?v=gqgwoeNuSBU" target="_blank"><img src="https://img.youtube.com/vi/gqgwoeNuSBU/0.jpg" alt="Demo Video" style="width:6666666666666660%;"/></a>
 </p>
   
 ## References
