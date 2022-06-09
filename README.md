@@ -7,7 +7,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 
 ## Concept Diagram
 <img src="/assets/Workflow.jpg" alt="Workflow of the Project" style="width:80%;vertical-align:middle;"/>
-<img src="/assets/Data_exchange.jpg" alt="Data Exchange" style="width:80%;vertical-align:middle;"/>
+<img src="/assets/Data_exchange.jpg" alt="Data Exchange" style="width:80%;margin: 20px auto;"/>
 
 ## User Interface of Web Platform
 ![UI](/assets/UI.jpg)
