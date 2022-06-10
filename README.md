@@ -28,6 +28,8 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 </p>
   
 ## User Interface of Web Platform
+- The user interface is comprised of six sections: 3D View, Status, Controls, Object Types, Data Table, and Data Displaying.
+- 
 <p align="center">
   <img src="/assets/UI.jpg" alt="UI" style="width:80%;"/>
 </p>
