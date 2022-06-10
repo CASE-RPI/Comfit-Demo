@@ -6,6 +6,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 - In smart home IoT sensors, one of the difficulties for users is to connect the sensor data with building information and analyze the real-time data. This project aims to develop a web-based building system platform for non-experts to easily monitor indoor thermal comfort and air quality using BIM & IoT sensors
 
 ## Concept Diagram
+- In this project, the workflow consists of BIM software, web platform, IoT sensor modules, and database
 <p align="center">
   <img src="/assets/Workflow.jpg" alt="Workflow of the Project" style="width:80%;"/>
 </p>
