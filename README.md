@@ -29,7 +29,12 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
   
 ## User Interface of Web Platform
 - The user interface is comprised of six sections: 3D View, Status, Controls, Object Types, Data Table, and Data Displaying.
-- 
+- '3D View' section displays the imported 3D geometries.
+- 'Status' section shows status of MQTT connection, the length of the aggregated sensor data, and real-time data from the sensor modules.
+- 'Controls' section provides controllers to visualize sensor data or import/export the data from/to a database.
+- 'Object Types' section enables to show on/of objects or change opacity/color of the objects by object type.
+- 'Data Table' section shows building information of the object that the user selects
+- 'Data Displaying' section displays all the objects and their properties that user selects
 <p align="center">
   <img src="/assets/UI.jpg" alt="UI" style="width:80%;"/>
 </p>
