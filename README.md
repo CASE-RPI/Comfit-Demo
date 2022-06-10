@@ -7,6 +7,8 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 
 ## Concept Diagram
 - In this project, the workflow consists of BIM software, web platform, IoT sensor modules, and database
+- In summary, BIM model can be imported from BIM software to the web platform with IFC.JSON file format. Sensor modules can be connected with the web via MQTT protocol, and snesor data is collected from the sensor. The aggregated sensor data can be stored in a database using Google API. 
+- In previous project, NodeRED is used as a server that processes and transfers the sensor data to the web platform; however, in this project, the sensor data is directly forward to the web without the additional server. It improves computational efficiency.   
 <p align="center">
   <img src="/assets/Workflow.jpg" alt="Workflow of the Project" style="width:80%;"/>
 </p>
