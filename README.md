@@ -50,6 +50,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
 - IFCJSON converter
 - MQTT.js
 - THREE.js
+- Datatable.js
 - Bootstrap
 
 
