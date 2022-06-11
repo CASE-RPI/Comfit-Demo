@@ -3,21 +3,22 @@ function setup() {
     timeStart = Date.now();
     blinkTime = Date.now();
 
-    setupProgram(); 
+    setupProgram();
     loadTypesInFile();
     loadAssets();
-    setupScene();   
-    setupGeometry();      
-    requestAnimationFrame(render); 
+    setupScene();
+    setupGeometry();
+    requestAnimationFrame(render);
+    // setupSensorDict(sensorDictPath);
     setupSliderInterval();
 }
 
-function setupProgram() {  
+function setupProgram() {
     console.log("setupProgram");
     const canvas = document.getElementById("c");
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     raycaster = new THREE.Raycaster();
     pointer = new THREE.Vector2();
@@ -30,17 +31,17 @@ function setupProgram() {
 function loadTypesInFile(){
 
     var fileLoader = new THREE.FileLoader();
-    fileLoader.load(ifcFilePath, function ( object ) { 
+    fileLoader.load(ifcFilePath, function ( object ) {
 
         // JIHOON: Import data in a IFCJSON file
-        if(JSON.parse(object)["data"]){                
+        if(JSON.parse(object)["data"]){
             jsonData = JSON.parse(object)["data"];
         } else if (JSON.parse(object)["Data"]) {
             jsonData = JSON.parse(object)["Data"];
         } else {
             console.log("This is not a valid file!");
         }
-        
+
         for (let i = 0; i < jsonData.length; i++){
             if (showElements.includes(jsonData[i].type) && jsonData[i].representations){
                 typesInFile.push(jsonData[i].type);
@@ -52,7 +53,7 @@ function loadTypesInFile(){
 }
 
 function loadAssets() {
-    //////////////////// Load the instantiate the chair model - its MTL and OBJ files //////////////////// 
+    //////////////////// Load the instantiate the chair model - its MTL and OBJ files ////////////////////
     console.log("loadAssets");
 
     loadIFCFiles();
@@ -61,34 +62,34 @@ function loadAssets() {
 function loadIFCFiles(){
         //JIHOON CHUNG: Create geometries from IFC.JSON files
         var fileLoader = new THREE.FileLoader();
-        fileLoader.load(ifcFilePath, function ( object ) {            
-    
+        fileLoader.load(ifcFilePath, function ( object ) {
+
             console.log("fileLoader");
             // JIHOON: Import data in a IFCJSON file
-            if(JSON.parse(object)["data"]){                
+            if(JSON.parse(object)["data"]){
                 jsonData = JSON.parse(object)["data"];
             } else if (JSON.parse(object)["Data"]) {
                 jsonData = JSON.parse(object)["Data"];
             } else {
                 console.log("This is not a valid file!");
             }
-            
+
             for (let i = 0; i < jsonData.length; i++){
                 if (selectedType.includes(jsonData[i].type) && jsonData[i].representations){
                     var objId = jsonData[i].representations[0].ref;
                     let verts = [], faces = [];
-                    
+
                     // JIHOON CHUNG: for indexing object names
-                    if (!type_dict[jsonData[i].type]) {        
-                        type_dict[jsonData[i].type] = 1;                       
+                    if (!type_dict[jsonData[i].type]) {
+                        type_dict[jsonData[i].type] = 1;
                     } else {
                         type_dict[jsonData[i].type] += 1;
                     }
-    
+
                     for (let j = 0; j < jsonData.length; j++){
                         if (jsonData[j].type == "shapeRepresentation" && jsonData[j].globalId == objId)
-                        {                             
-                            // JIHOON: Import mesh data into verts & faces list     
+                        {
+                            // JIHOON: Import mesh data into verts & faces list
                             jsonOBJ = jsonData[j].items[0];
                             jsonOBJ.split('\n').forEach((e) => {
                                 if (e.split(' ')[0] === 'v'){
@@ -102,21 +103,21 @@ function loadIFCFiles(){
                                         a: parseInt(e.split(' ')[1]),
                                         b: parseInt(e.split(' ')[2]),
                                         c: parseInt(e.split(' ')[3]),
-                                    });}                                        
+                                    });}
                             });
-    
-                            templateJSON = new THREE.OBJLoader().parse(jsonOBJ);                            
+
+                            templateJSON = new THREE.OBJLoader().parse(jsonOBJ);
                             templateJSON.castShadow = true;
                             templateJSON.receiveShadow = false;
-                            
+
                             for (k = 0; k < colorInpObj.data.length; k++){
-                                if (jsonData[i].type == colorInpObj.data[k].type) {                        
+                                if (jsonData[i].type == colorInpObj.data[k].type) {
                                     var material = new THREE.MeshPhongMaterial({
                                         color: colorInpObj.data[k].color ? colorInpObj.data[k].color : "#ffffff",
                                         opacity: colorInpObj.data[k].opacity ? colorInpObj.data[k].opacity : 0.2,
-                                        transparent: true                 
-                                    });       
-                               
+                                        transparent: true
+                                    });
+
                                     let geometry = new THREE.BufferGeometry();
                                     let points = [];
                                     faces.forEach((f) => {
@@ -130,38 +131,38 @@ function loadIFCFiles(){
                                     templateJSON.children[0].geometry = geometry;
                                     templateJSON.children[0].material = material;
                                     templateJSON.children[0].castShadow = true;
-                                    templateJSON.name = jsonData[i].name + "_" + type_dict[jsonData[i].type];                                
-                                    templateJSON.userData.type = jsonData[i].type;                                
+                                    templateJSON.name = jsonData[i].name + "_" + type_dict[jsonData[i].type];
+                                    templateJSON.userData.type = jsonData[i].type;
                                     templateJSON.userData.volume = jsonData[i].Volume;
-                                    templateJSON.userData.area = jsonData[i].Area; 
+                                    templateJSON.userData.area = jsonData[i].Area;
                                     templateJSON.userData.centroid = getCenterPoint(templateJSON.children[0]);
                                     templateJSON.userData.cost = "$"+colorInpObj.data[k].cost;
-                                    
+
                                     if (jsonData[i].ThermalTransmittance) {
                                         templateJSON.userData.ThermalTransmittance = jsonData[i].ThermalTransmittance;
-                                    }                                       
+                                    }
                                     if (jsonData[i].Length) {
                                         templateJSON.userData.length = jsonData[i].Length;
-                                    }                                        
+                                    }
                                     if (jsonData[i].Mark && jsonData[i].type=="ElectricAppliance") {
                                         templateJSON.userData.sensorId = jsonData[i].Mark;
                                     }
-                                
+
                                     templateJSON.rotation.x = -Math.PI / 2;
                                     templateJSON.scale.set(scale, scale, scale);
-                                    
+
 
                                     scene.add(templateJSON);
                                     scene.updateMatrixWorld(true);
                                     var pos = new THREE.Vector3();
                                     pos.setFromMatrixPosition(templateJSON.matrixWorld);
                                 }
-                            }                            
+                            }
                             backupElements.push(templateJSON);
                         }
                     }
-                }                
-            }                         
+                }
+            }
         } );
 }
 
@@ -171,7 +172,7 @@ function setupScene() {
 
     // 2. Create the Camera
     const fov = 75;
-    const aspect = 2;  
+    const aspect = 2;
     const near = 0.1;
     const far = 5000;
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -209,10 +210,10 @@ function setupScene() {
     // JIHOON: GUI for camera controller
     function updateCamera() {
         camera.updateProjectionMatrix();
-    }     
-    
+    }
+
     gui.domElement.id = 'gui';
-    
+
     cameraFolder = gui.addFolder('Camera');
     cameraFolder.add(camera.position, 'z', 10, 100);
     cameraFolder.add(camera, 'fov', 10, 100).onChange(updateCamera);
@@ -287,7 +288,7 @@ function addCubeFolder(){
     } else {
         controlR = cubeFolder.add(selElement.rotation, 'z', -Math.PI, Math.PI);
     }
-    cubeFolder.open();  
+    cubeFolder.open();
 }
 
 // JIHOON: Add HTML table of the selected element
@@ -313,7 +314,7 @@ function addSelTable(){
                 p == "z" ? textout += "" : textout += ", ";
             })
         } else if (typeof value_ == "number") {
-            textout += Math.round(value_*1000)/1000; 
+            textout += Math.round(value_*1000)/1000;
         } else {
             textout += value_;
         }
@@ -356,11 +357,11 @@ function loadSelectTypeDiv(){
 
         // JIHOON: Add checkbox input
         textout += '<tr><td class="table table-bordered"><input style="width:17px; height:17px" type="checkbox" value=';
-        textout += myType;        
+        textout += myType;
         if (typesInFile.includes(showElements[i]) || showElements[i] == "Chair"|| showElements[i] == "Table"){
             textout += ' checked';
             selectedType.push(showElements[i]);
-        }        
+        }
         textout += ' onclick="updateViewObject(this)"></td><td>';
         textout += myType + "</td><td>";
         textout += '<input type="color" style="width:48px;height:32px" name="'
@@ -429,7 +430,7 @@ function onTypeColor(aname, avalue, atype){
         }
     }
 
-    for (var i = 0; i < scene.children.length; i++) {  
+    for (var i = 0; i < scene.children.length; i++) {
         if (aname == scene.children[i].userData.type) {
             scene.children[i].children[0].material = new THREE.MeshPhongMaterial({
                 color: acolor,
@@ -443,14 +444,78 @@ function onTypeColor(aname, avalue, atype){
 // JIHOON: Read sensor data from the google sheet
  function readData() {
     console.log("listMajors");
+    // gapi.client.sheets.spreadsheets.values.get({
+    //     spreadsheetId: '1_2bu4jvEizYdQoOlnAdVMeij2yDQgI8nUSB8KjQL0tc',
+    //     range: 'Sheet1!A1:F',
+    // }).then(function (response) {
+    //
+    //     var range = response.result;
+    //     console.log(range.values);
+    //     if (range.values.length > 0) {
+    //         var valueKeys = range.values[0];
+    //         for (j = 0; j < valueKeys.length; j++){
+    //             var column = [];
+    //             if (sensorDictKeys.includes(valueKeys[j])){
+    //                 for (i = 1; i < range.values.length; i++) {
+    //                     column.push(range.values[i][j]);
+    //                 }
+    //                 sensorDict[valueKeys[j]] = column.concat(sensorDict[valueKeys[j]]);
+    //             }
+    //         }
+    //     } else {
+    //         appendPre('No data found.');
+    //     }
+    // }, function (response) {
+    //     appendPre('Error: ' + response.result.error.message);
+    // });
     alert("This function is not provided in this live-demo version");
 }
 
 // JIHOON: Write sensor data on the google sheet
 function writeData() {
     console.log("writeData");
+    // var values = [];
+    // values.push(sensorDictKeys);
+    //
+    // for (var i = 0; i < sensorDict[strTime].length; i++) {
+    //     var mydat = [];
+    //
+    //     sensorDictKeys.forEach(e => {
+    //         mydat.push(sensorDict[e][i]);
+    //     });
+    //     values.push(mydat);
+    // }
+    //
+    // console.log(values);
+    //
+    // var body = {
+    //     values: values
+    // };
+    // gapi.client.sheets.spreadsheets.values.update({
+    //     spreadsheetId: '1_2bu4jvEizYdQoOlnAdVMeij2yDQgI8nUSB8KjQL0tc',
+    //     range: 'Sheet1!A1:F',
+    //     valueInputOption: 'RAW',
+    //     resource: body
+    // }).then((response) => {
+    //     var result = response.result;
+    //     console.log(`${result.updatedCells} cells updated.`);
+    // });
     alert("This function is not provided in this live-demo version");
 }
+
+// JIHOON: Save the keys of sensorDict into another list
+// function setupSensorDict(filePath){
+//     fetch(filePath).then(function(response){
+//         response.text().then(function(text){
+//             sensorDictKeys = Object.keys(JSON.parse(text)).slice(1);
+//             sensorDictKeys.unshift(strTime);
+//             sensorDictKeys.unshift(numTime);
+//             sensorDictKeys.forEach(e => {
+//                 sensorDict[e] = [];
+//             });
+//         })
+//     });
+// }
 
 // JIHOON: Setup the timeSlider on the web
 function setupSliderInterval(){
@@ -467,12 +532,12 @@ function importSensorData(filePath){
             document.getElementById("lenData").innerHTML = sensorDict[numTime].length;
             sensorRealtime = JSON.parse(text);
             var inputText = "";
-            var strTime_ = rewriteTimestamp_save(timeNow);        
+            var strTime_ = rewriteTimestamp_save(timeNow);
             var showDict = "<br>";
-            
+
             sensorDictKeys.forEach(e => {
-                if (e == strTime){                    
-                    sensorDict[strTime].push(strTime_);                    
+                if (e == strTime){
+                    sensorDict[strTime].push(strTime_);
                 } else if (e == numTime) {
                     sensorDict[numTime].push(timeNow);
                 } else {
@@ -481,13 +546,12 @@ function importSensorData(filePath){
 
                     sensorDict[e].push(parseFloat(inputValue));
                     inputText += '<br>' + e + ': ' + inputValue.toString();
-                }  
+                }
                 showDict += e + ": ";
                 showDict += "["+sensorDict[e].toString() + "]<br>";
             });
 
-            document.getElementById('getObject').innerHTML = inputText;          
-            //document.getElementById('showDict').innerHTML = showDict;
+            document.getElementById('getObject').innerHTML = inputText;
             });
         });
         timeStart = Date.now();
@@ -505,7 +569,7 @@ function importSensorData(filePath){
         }
 
         if (heatmapOn) {
-            currentHeightRatio = meshHeat.material.uniforms.heightRatio.value;       
+            currentHeightRatio = meshHeat.material.uniforms.heightRatio.value;
             scene.remove(scene.getObjectByName(varVizualize));
             var idx = 0;
             for (var i = 0; i < scene.children.length+1; i++) {
@@ -519,12 +583,12 @@ function importSensorData(filePath){
             }
 
             drawHeatmap(sensorRealtime);
-            realtimeDataDisplay(sensorRealtime);  
-        } 
-       } 
+            realtimeDataDisplay(sensorRealtime);
+        }
+       }
 
 
-       if (Math.floor((timeNow-blinkTime)/1000) >= blinkInterval) {    
+       if (Math.floor((timeNow-blinkTime)/1000) >= blinkInterval) {
         for (var i = 0; i < scene.children.length; i++) {
             if (sensorDictKeys.slice(2).includes(scene.children[i].userData.sensorId)) {
                 var sensorClr_;
@@ -534,12 +598,12 @@ function importSensorData(filePath){
                 } else {
                     sensorClr_ = colorInpObj.data[6].color;
                     blinkOn = true;
-                }    
+                }
 
                 scene.children[i].children[0].material = new THREE.MeshPhongMaterial({
                     color: sensorClr_,
                     opacity: colorInpObj.data[6].opacity,
-                    transparent: true  
+                    transparent: true
                 });
             }
         }
@@ -587,10 +651,10 @@ function createHeightMap(sensorRealtime){
     var radius = 50;
 
     for (var i = 0; i < scene.children.length; i++) {
-        if (sensorDictKeys.slice(2).includes(scene.children[i].userData.sensorId)) {            
-            var x = (scene.children[i].userData.centroid.x-20 + prev_max/2)/prev_max * canvas.width; //  
+        if (sensorDictKeys.slice(2).includes(scene.children[i].userData.sensorId)) {
+            var x = (scene.children[i].userData.centroid.x-20 + prev_max/2)/prev_max * canvas.width; //
             var y = (-scene.children[i].userData.centroid.y+15+prev_max/2)/prev_max * canvas.width;// ;
-            
+
             if (realtimeOn){
                 var h8 = sensorRealtime[scene.children[i].userData.sensorId] / sensorValueMax * 255;
             } else {
@@ -609,7 +673,7 @@ function createHeightMap(sensorRealtime){
         } else if (scene.children[i].userData.type == "Wall"){
             var x = scene.children[i].userData.centroid.x;
             var y = scene.children[i].userData.centroid.y;
-            var h8 = 0;     
+            var h8 = 0;
             var grd = ctx.createRadialGradient(x, y, 1, x, y, radius);
 
             grd.addColorStop(0, "rgb("+ h8 + "," + h8 + "," + h8 +")");
@@ -640,7 +704,7 @@ function getCenterPoint(mesh) {
 function drawHeatmap(sensorRealtime){
     const planeHeatmap = new THREE.PlaneGeometry(50, 50, 100, 100);
     planeHeatmap.rotateX(-Math.PI * 0.5);
-    
+
     // JIHOON: Update height value of the heatmap
     if (controlHeat){
         currentHeightRatio = meshHeat.material.uniforms.heightRatio.value;
@@ -691,7 +755,7 @@ function drawHeatmap(sensorRealtime){
     if (heatmapOn){
         scene.add(meshHeat);
         controlHeat = heatFolder.add(meshHeat.material.uniforms.heightRatio, "value", 1, 15).name("heightRatio");
-        heatFolder.open(); 
+        heatFolder.open();
     }
 
 }
@@ -705,7 +769,7 @@ function activeSensorLocation() {
             var z = scene.children[i].userData.centroid.z;
             var radius = 1;
 
-            const geometry = new THREE.SphereGeometry( radius, 16, 16 );                    
+            const geometry = new THREE.SphereGeometry( radius, 16, 16 );
             const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
             const sphere = new THREE.Mesh( geometry, material );
             sphere.position.x = x -20;
@@ -735,7 +799,7 @@ function realtimeDataDisplay(sensorRealtime) {
             if (realtimeOn){
                 value_ = sensorRealtime[scene.children[i].userData.sensorId];
                 console.log(sensorRealtime[scene.children[i].userData.sensorId]);
-                text += value_;                
+                text += value_;
             } else {
                 value_ = sensorDict[scene.children[i].userData.sensorId][vizIndex];
                 text += value_;
@@ -748,14 +812,14 @@ function realtimeDataDisplay(sensorRealtime) {
             } else {
                 lineClr_= 0xffffff;
                 textClr_ = {r:255, g:255, b:255, a:1.0};
-            } 
+            }
 
-            var measurement = makeTextSprite(text.toString(), 
+            var measurement = makeTextSprite(text.toString(),
             { fontsize: 18, textColor: textClr_});
             measurement.position.set(x,y* currentHeightRatio,z);
             measurement.name = varText;
             //idx += 1;
-            
+
             scene.add(measurement);
 
             const materialLine = new THREE.LineBasicMaterial( { color: lineClr_ } );
@@ -767,7 +831,7 @@ function realtimeDataDisplay(sensorRealtime) {
             const sensorLine = new THREE.Line( geoLine, materialLine );
             sensorLine.name = varLine;
 
-            scene.add(sensorLine);         
+            scene.add(sensorLine);
         }
     }
 }
@@ -788,15 +852,15 @@ function toggleViz(){
                 scene.remove(scene.children[i]);
                 i -= 1;
                 idx += 1;
-            } 
-        }     
+            }
+        }
 
         controlHeat = NaN;
     } else {
         heatmapOn = true;
 
         drawHeatmap(sensorRealtime);
-        realtimeDataDisplay(sensorRealtime);        
+        realtimeDataDisplay(sensorRealtime);
     }
 }
 
@@ -831,13 +895,13 @@ function makeTextSprite( message, parameters )
     context.fillStyle = "rgba("+textColor.r+", "+textColor.g+", "+textColor.b+", 1.0)";
     context.fillText( message, borderThickness, fontsize + borderThickness);
 
-    var texture = new THREE.Texture(canvas) 
+    var texture = new THREE.Texture(canvas)
     texture.needsUpdate = true;
     var spriteMaterial = new THREE.SpriteMaterial( { map: texture } );
     var sprite = new THREE.Sprite( spriteMaterial );
     sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
 
-    return sprite;  
+    return sprite;
 }
 
 // JIHOON: Update strings of timeSlider
@@ -852,7 +916,7 @@ function updateTimeline(){
         if (realtimeOn) {
             var currentValue = sensorDict[numTime][lenSensorDict-1];
             document.getElementById("inputTimeSlider").value = currentValue;
-            document.getElementById("sliderValue").innerHTML = "<br><span id='subtitles'>Selected Time: </span>" + rewriteTimestamp_show(currentValue);   
+            document.getElementById("sliderValue").innerHTML = "<br><span id='subtitles'>Selected Time: </span>" + rewriteTimestamp_show(currentValue);
         }
     }
 }
@@ -860,7 +924,7 @@ function updateTimeline(){
 // JIHOON: Select time point to visualize historical data
 function timeSlider(){
     var vizTime = parseInt(document.getElementById("inputTimeSlider").value);
-    document.getElementById("sliderValue").innerHTML = "<br><span id='subtitles'>Selected Time: </span>" + rewriteTimestamp_show(vizTime);   
+    document.getElementById("sliderValue").innerHTML = "<br><span id='subtitles'>Selected Time: </span>" + rewriteTimestamp_show(vizTime);
     var inList = sensorDict[numTime].map(function(x) { return parseInt(x / 1000); });
     var goal = parseInt(vizTime / 1000);
     var closest = inList.reduce(function(prev, curr) {
@@ -894,52 +958,46 @@ function render(time) {
         const intersects = raycaster.intersectObjects(scene.children);
 
         for (let i = 0; i < intersects.length; i++) {
-            // the objects are nested so we need to ask for the selected object's parent.
-            //!HW filter for only selected objects that are model objects (not lights, cameras, etc.)
-            
             // JIHOON: to show certain elements defined in 'showElements'
             if (showElements.includes(intersects[i].object.parent.userData.type)) {
-                //console.log(intersects[0].object.parent.name);
-                //!HW This is tricky. The selected mesh is likely to be a part of the object, not the object itself. Get its parent.
-                //!HW if you are generating objects as simple THREE.Geometry objects this parent reference may not be needed 
+
                 selElement = intersects[i].object.parent;
 
-                // JIHOON: 
+                // JIHOON:
                 if (prevFurniture && prevMaterial) {
-                    prevFurniture.children[0].material = prevMaterial;                        
-                }            
+                    prevFurniture.children[0].material = prevMaterial;
+                }
                 prevFurniture = selElement;
-                prevMaterial = selElement.children[0].material;  
+                prevMaterial = selElement.children[0].material;
 
                 // JIHOON: Clicked element's color is chaged to Red
                 selElement.children[0].material = new THREE.MeshPhongMaterial({
                     color: 0xff0000,
                     opacity: 0.8,
-                    transparent: true  
+                    transparent: true
                 });
-                
-                if (lock == false || selElement.name != lastObjectName ) {                            
+
+                if (lock == false || selElement.name != lastObjectName ) {
                     if(controlX){
                         cubeFolder.remove(controlX);
                         cubeFolder.remove(controlY);
                         cubeFolder.remove(controlZ);
                         cubeFolder.remove(controlR);
                     }
-                    
+
                     addCubeFolder();
                     lastObjectName = selElement.name;
                     lock = true;
                 }
                 addSelTable();
             }
-            //console.log("Name is: " + intersects[i].object.name);
         }
     }
-    
+
     updateGui();
     updateConnection();
     importSensorData(sensorDictPath);
-    
+
     renderer.render(scene, camera);
     requestAnimationFrame(render);
 }
@@ -955,26 +1013,23 @@ function onPointerMove(event) {
     var X = event.clientX - canvas.getBoundingClientRect().left;
     var Y = event.clientY - Math.round(canvas.getBoundingClientRect().top);
 
-    // pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-    // pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
     pointer.x = (X / width) * 2 - 1;
     pointer.y = - (Y / height) * 2 + 1;
     rayset = true;
 
 }
 
-////////////////  onDisplayData  This function gets called when the display data button //// 
+////////////////  onDisplayData  This function gets called when the display data button ////
 function onDisplayData(key) {
-    //!HW Make a text string of the HTML required to capture the data, incrementally add to this string.
     var textout = "";
     textout += "<table class='table table-bordered TableStyle'>"  // Table header
     textout += "<thead><tr><th>Object Name</th><th style='width:30%'>"+key+"</th></tr></thead>";
 
     for (var i = 0; i < scene.children.length; i++) {  // for each of the children in the scene
-        var myObject = scene.children[i];   
+        var myObject = scene.children[i];
         // filter somehow for only the model elements, not things like lights and cameras
         if ((myObject[key] || myObject.userData[key]) && myObject.name) {
-                   
+
             if (true) {
                 textout += "<tr><td>";
                 textout += myObject.name;
@@ -986,7 +1041,7 @@ function onDisplayData(key) {
                     })
                 } else {
                     myObject.userData[key] ? textout += myObject.userData[key] : textout += myObject[key];
-                }                
+                }
                 textout += "</td></tr>";
             }
         }
@@ -1009,7 +1064,7 @@ class GraphTable {
       this.sensorDict = sensorDict_;
       this.divid = divID;
   };
-  
+
     refresh() {
         var myDiv = document.getElementById(this.divid);
         var atext = "";
@@ -1024,17 +1079,17 @@ class GraphTable {
         var sensorType = this.selElement.userData.sensorId;
         var sensorData = this.sensorDict[sensorType];
         var timeData = this.sensorDict[strTime];
-              
+
         var ctx = document.getElementById("myAreaChart");
         _line_component.data.labels = timeData;
         _line_component.data.datasets[0].data = sensorData;
         _line_component.data.datasets[0].label = sensorType;
-        var chart = new Chart(ctx, _line_component);      
+        var chart = new Chart(ctx, _line_component);
         }
     }   // end table class
 
-  
-  
+
+
 //////////////////////////////////      RealTable class         ////////////////////////////////
 
 class RealTable {
@@ -1057,29 +1112,29 @@ class RealTable {
     atext += '<div class="textGauge">'+sensorData+'</div>';
     atext += "</div></td></tr></table>";
 
-    myDiv.innerHTML = atext;        
+    myDiv.innerHTML = atext;
 
     var ctx = document.getElementById("myGaugeChart");
     var chart = new Chart(ctx, _gauge_component);
     change_gauge(chart, "Gauge", [sensorData, maxCO2-sensorData]);
     }
 }   // end table class
-   
-  
+
+
   // Set new default font family and font color to mimic Bootstrap's default styling
   Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
   Chart.defaults.global.defaultFontColor = '#858796';
-  
-   //JIHOON: drawing & updating charts 
+
+   //JIHOON: drawing & updating charts
   function change_gauge(chart, label, data){
     chart.data.datasets.forEach((dataset) => {
       if(dataset.label == label){
         dataset.data = data;
-      }  
+      }
     });
     chart.update();
   }
-  
+
   _gauge_component = {
     type:"doughnut",
     data: {
@@ -1134,7 +1189,7 @@ class RealTable {
         }
     }
   }
-  
+
   function number_format(number, decimals, dec_point, thousands_sep) {
     // *     example: number_format(1234.56, 2, ',', ' ');
     // *     return: '1 234,56'
@@ -1159,8 +1214,8 @@ class RealTable {
     }
     return s.join(dec);
   }
-  
-// JIHOON: Basic components to show a line chart 
+
+// JIHOON: Basic components to show a line chart
   _line_component = {
     type: 'line',
     data: {
@@ -1248,9 +1303,3 @@ class RealTable {
       }
     }
   }
-
-
-
-
-
-

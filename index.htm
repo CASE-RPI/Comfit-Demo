@@ -3,14 +3,14 @@
 
 <head>
   <title>Comfit: Make Your Space Fit and Comfortable!</title>
-  
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,700|Lato:300,400,700&display=swap" rel="stylesheet">
   <script src="lib/three/build/three.min.js"></script>
   <script src="lib/three/examples/js/controls/OrbitControls.js"></script>
   <script src="lib/three/examples/js/loaders/OBJLoader.js"></script>
   <script src="lib/three/examples/js/loaders/MTLLoader.js"></script>
-  
+
   <script src="lib/dat.gui.min.js"></script>
   <script src="lib/r_utils3d.js"></script>
 
@@ -23,12 +23,18 @@
   integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 
   <script src="lib/datatable.js"></script>
+
+  <!-- Script for Google API -->
+  <!-- <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+  onreadystatechange="if (this.readyState === 'complete') this.onload()">
+  </script> -->
+
 </head>
 
 <body onload="setup();">
   <div class="container menuItem">
     <iframe src="menu.htm" name="iframe_a" width="100%" style="border:none;" title="Menu"></iframe>
-  </div>  
+  </div>
   <div id="flex-container" class=" content" align="center">
 
     <!-------------------------  Jumbotron for Main Image  ---------------------------->
@@ -55,7 +61,7 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
 
       <!-------------------------  Status Panel  ---------------------------->
       <div class="row gx-4 mb-4">
@@ -82,24 +88,28 @@
               <button class="googleApi" id="signout_button" onclick="readData();">Sign Out</button>
               <button class="googleApi" id="read_data" onclick="readData();">Read</button>
               <button class="googleApi" id="write_data" onclick="readData();">Write</button>
+              <!-- <button class="googleApi" id="authorize_button" style="display: none;">Authorize</button>
+              <button class="googleApi" id="signout_button" style="display: none;">Sign Out</button>
+              <button class="googleApi" id="read_data" style="display: none;" onclick="readData();">Read</button>
+              <button class="googleApi" id="write_data" style="display: none;" onclick="writeData();">Write</button> -->
             </div><br>
-            <span id="subtitles">Toggle Heatmap: </span> 
+            <span id="subtitles">Toggle Heatmap: </span>
             <label class="switch">
               <input type="checkbox" onchange="toggleViz()">
               <span class="toggle round"></span>
             </label>
-            <span id="subtitles">Visualize Realtime Data: </span> 
+            <span id="subtitles">Visualize Realtime Data: </span>
             <label class="switch">
               <input type="checkbox" onchange="realtimeViz()" checked>
               <span class="toggle round"></span>
             </label><br>
-            <span id="subtitles">Heatmap Timeline: </span> 
+            <span id="subtitles">Heatmap Timeline: </span>
             <label class="slider">
               <span id="sliderMin"></span>
               <input type="range" id="inputTimeSlider" min="0", max="100", step="10", onchange="timeSlider()">
               <span id="sliderMax"></span>
-            </label>        
-            <span id="sliderValue"></span>    
+            </label>
+            <span id="sliderValue"></span>
           </div>
         </div>
     </div>
@@ -142,15 +152,15 @@
         <div class="col-5 contact mt-5">
           <div class="contact-header mb-3">Contact Us</div>
           <div class="contact-content"><strong>Comfit, Inc.</strong><br>
-            Jihoon Chung<br>Email: chungj11@rpi.edu 
-          <br>Addr: 86 34th St. Suite D601, <br>Brooklyn, NY 11232</div> 
+            Jihoon Chung<br>Email: chungj11@rpi.edu
+          <br>Addr: 86 34th St. Suite D601, <br>Brooklyn, NY 11232</div>
         </div>
     </div>
     <div class="row">
       <div class="col-12 mt-2">
       <div class="copyright">Copyright © Jihoon Chung. All rights reserved.</div>
     </div>
-    </div>    
+    </div>
     </div>
 
 

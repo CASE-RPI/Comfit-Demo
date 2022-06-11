@@ -83,8 +83,8 @@ var type_dict = {}
 
 var gui = new dat.GUI();
 var cameraFolder;
-var cubeFolder; 
-var heatFolder; 
+var cubeFolder;
+var heatFolder;
 var selElement;
 var sensorDictPath = 'exportDict.json';
 var lenSensorDict;
@@ -94,6 +94,8 @@ var blinkTime;
 var blinkOn = false;
 var numTime = 'numTimestamp';
 var strTime = 'strTimestamp';
+// var sensorDict = {}
+// var sensorDictKeys;
 var sensorDict = {'strTimestamp': [], 'numTimestamp': [], "Sensor7": [], "Sensor10": [], "Sensor2": []};
 var sensorDictKeys = ['strTimestamp', 'numTimestamp', "Sensor7", "Sensor10", "Sensor2"];
 var varVizualize = "sensorDataViz";
