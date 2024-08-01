@@ -13,7 +13,7 @@ Visit the Live Demo: [https://jchung-rpi.github.io/Comfit-Demo/](https://jchung-
   <img src="/assets/Workflow.jpg" alt="Workflow of the Project" style="width:80%;"/>
 </p>
 
-## Data Exchange between BIM software and web paltform
+## Data Exchange between BIM software and web platform
 - If the users generate building elements using Rhino Grasshopper plugin or Revit software, the data including geometries, positioning, object types, and sensor ID can be exported into IFC.JSON or IFC format file.
 - The exported file can be imported by a web platform, and the IFC file can be automatically converted into IFC.JSON format. The imported data can be visualized on the platform using THREE.js and the user can simply manipulate the objects using dat.gui controls. Also, the objects can be viewed or colored by object type.
 <p align="center">
